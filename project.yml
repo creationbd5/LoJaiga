@@ -1,20 +1,29 @@
+
 name: LoJaiga
+
 options:
   bundleIdPrefix: com.lojaiga
   deploymentTarget:
     iOS: "18.0"
+
 settings:
   base:
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "0.3.0"
-    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "0.5.0"
+    CURRENT_PROJECT_VERSION: "2"
+
 targets:
   LoJaiga:
     type: application
     platform: iOS
     deploymentTarget: "18.0"
+
     sources:
-      - LoJaiga
+      - path: LoJaiga
+        excludes:
+          - "Logo.imageset/**"
+          - "BrandMascot.imageset/**"
+
     info:
       path: Config/Info.plist
       properties:
@@ -26,27 +35,33 @@ targets:
           UIApplicationSupportsMultipleScenes: false
         UIBackgroundModes:
           - audio
-        NSMicrophoneUsageDescription: Lo Jaiga listens for your spoken commands (for example "Baad Dey") only while voice control is switched on.
-        NSSpeechRecognitionUsageDescription: Lo Jaiga turns your spoken commands into text on your iPhone so it can run them.
+        NSMicrophoneUsageDescription: Lo Jaiga uses the microphone for voice commands when voice control is enabled.
+        NSSpeechRecognitionUsageDescription: Lo Jaiga recognizes spoken commands to provide driving assistance.
         ITSAppUsesNonExemptEncryption: false
+
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.lojaiga.app
         TARGETED_DEVICE_FAMILY: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: NO
+
   LoJaigaTests:
     type: bundle.unit-test
     platform: iOS
     deploymentTarget: "18.0"
+
     sources:
-      - LoJaigaTests
+      - path: LoJaigaTests
+
     dependencies:
       - target: LoJaiga
+
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.lojaiga.app.tests
+
 schemes:
   LoJaiga:
     build:
