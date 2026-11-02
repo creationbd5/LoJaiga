@@ -1,0 +1,58 @@
+name: Build Lo Jaiga (unsigned IPA)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install XcodeGen and generate project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Unit tests (simulator)
+        continue-on-error: true
+        run: |
+          SIM=$(xcrun simctl list devices available | grep -m1 "iPhone" | sed -E 's/.*\(([0-9A-F-]{36})\).*/\1/')
+          echo "Using simulator $SIM"
+          set -o pipefail
+          xcodebuild test -project LoJaiga.xcodeproj -scheme LoJaiga \
+            -destination "id=$SIM" CODE_SIGNING_ALLOWED=NO 2>&1 | tee test.log
+
+      - name: Build device app (no signing)
+        run: |
+          set -o pipefail
+          xcodebuild build -project LoJaiga.xcodeproj -scheme LoJaiga \
+            -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" 2>&1 | tee build.log
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/LoJaiga.app Payload/
+          zip -qr LoJaiga-unsigned.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LoJaiga-unsigned-ipa
+          path: LoJaiga-unsigned.ipa
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs
+          path: |
+            build.log
+            test.log
