@@ -1,0 +1,61 @@
+name: LoJaiga
+options:
+  bundleIdPrefix: com.lojaiga
+  deploymentTarget:
+    iOS: "18.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.6.0"
+    CURRENT_PROJECT_VERSION: "3"
+targets:
+  LoJaiga:
+    type: application
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - path: LoJaiga/LoJaigaApp.swift
+      - path: LoJaiga/Models
+      - path: LoJaiga/Services
+      - path: LoJaiga/Views
+      - path: LoJaiga/Assets.xcassets
+    info:
+      path: Config/Info.plist
+      properties:
+        CFBundleDisplayName: Lo Jaiga
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UIBackgroundModes:
+          - audio
+        NSMicrophoneUsageDescription: Lo Jaiga uses your microphone when you enable voice commands.
+        NSSpeechRecognitionUsageDescription: Lo Jaiga recognizes your spoken commands to help analyze trips.
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lojaiga.app
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: NO
+  LoJaigaTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - path: LoJaigaTests
+    dependencies:
+      - target: LoJaiga
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.lojaiga.app.tests
+schemes:
+  LoJaiga:
+    build:
+      targets:
+        LoJaiga: all
+    test:
+      targets:
+        - LoJaigaTests
