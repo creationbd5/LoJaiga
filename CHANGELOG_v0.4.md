@@ -1,0 +1,5 @@
+- Reduced voice commands to two for a simple test UI. Old 10-item preferences are safely trimmed during decode.
+- Added searchable Apple Maps location picker with map selection and per-place radius.
+- Kept 5 preferred/5 avoid slots, and existing Good/Bad analysis, manual screenshot OCR and history.
+- Replaced voice actions with safe local verdict and local ignore. **No Uber button automation.**
+- Xcode compilation and device verification are still required.
