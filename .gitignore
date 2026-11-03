@@ -1,7 +1,0 @@
-*.xcodeproj
-build/
-Payload/
-*.ipa
-*.log
-.DS_Store
-xcuserdata/
